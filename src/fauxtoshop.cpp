@@ -80,11 +80,14 @@ int main() {
     if (userSave.size()!=0) {
         cout<<saveImageToFilename(img,userSave)<<endl;
     }
+    else {
+        return 0;
+    }
 
 
 
-    int row, col;
-    getMouseClickLocation(row, col);
+//    int row, col;
+//    getMouseClickLocation(row, col);
     return 0;
 }
 
@@ -199,13 +202,17 @@ static void option3( Grid<int> &backg,GBufferedImage &img1){
     GBufferedImage stick;
     string filename= "cat-green.jpg";
     openImageFromFilename(stick, filename);
+    //see option 1 for details same process
     Grid<int> stickGr;
     stick.toGrid(stickGr);
 
     //client defined
-    int row=300;
-    int col=50;
+//    int row=300;
+//    int col=50;
 
+     int row, col;
+    getMouseClickLocation(row, col);
+    cout<<row<<col<<endl;
     cout<<"rows are"<<stickGr.numRows()<<endl;
     cout<<"cols are"<<stickGr.numCols()<<endl;
 
