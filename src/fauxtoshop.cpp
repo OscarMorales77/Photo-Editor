@@ -17,7 +17,7 @@ int main() {
     string filename; //user input filename string
     int userInt;
     string userSave; //file name of image to be saved
-    Grid<int>original;
+    Grid<int>original; //maps the 2D pixels into int(RGB) grid scheme
 
     cout << "Welcome to Fauxtoshop!" << endl;
 
@@ -26,17 +26,23 @@ int main() {
         cout << "Enter name of file to open (or blank to quit):" << flush;
 
         getline(cin,filename); //convert input console to filename string
-         cout <<filename.length()<<endl;
+        if (filename.length()==0) {
+            gw.setVisible(false);
+            gw.setExitOnClose();
+            //exit the program if the input is 0
+            return 0;
+        }
     } while (!openImageFromFilename(img, filename));
 
     //once the filename is loaded to img assign it to Grid<int> 2D matrix
-    // each element of the grid represents RGB values of the image
-    //passed the img by reference
+    // each element of the grid represents RGB (int) values of the image
+    //passed the img by reference (can also be returned)
     img.toGrid(original);
 
     cout << "Opening image file, may take a minute.." <<endl;
     //set the window console to the same size as the image
     gw.setSize(img.getWidth(), img.getHeight());
+    //add the selected imgage to the console notice we are passing a pointer bc the function takes a pointer as a parameter
     gw.add(&img,0,0);
 
     cout << "Which image fileter would you like to apply?" <<endl;
@@ -101,15 +107,20 @@ static void option1(const Grid<int> &original,GBufferedImage &img1){
         degree=getInteger();
     } while (!(degree>=0&&degree<=100));
 
-    // create an object named "other" and call its constructor
+    // create an object of type Grid named "other" and call its constructor
     Grid<int> other (original.numRows(),original.numCols()) ;
 
     for (int i=0;i<other.numRows();i++) {
         for (int j=0;j<other.numCols();j++) {
+
+            //randomnly genereate a int that is within the specified range from the current
+            //row and column
             uniform_int_distribution<> rowe(i-degree, i+degree);
             uniform_int_distribution<> cole(j-degree, j+degree);
 
+            //check that the selected row and col are within bounds
             do {
+                //generate random row and col
                 rowRan=rowe(gen);
                 colRan=cole(gen);
 
@@ -121,11 +132,13 @@ static void option1(const Grid<int> &original,GBufferedImage &img1){
 
     }
 
+    //change the current console img to the genereated int OTHER
     img1.fromGrid(other);
 
 
 }
 
+//Helper Function that gets the RGB color difference of two pixels
 static int maxDiff(int pixel1, int pixel2){
 
     int r1,g1,b1;
