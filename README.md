@@ -1,0 +1,1 @@
+A simple Photo Editor in C++ (with the stanford c++ library ).
